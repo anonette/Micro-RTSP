@@ -1,7 +1,6 @@
 #ifndef OV2640_H_
 #define OV2640_H_
-
-#include <Arduino.h>
+#include "Arduino.h"
 #include <pgmspace.h>
 #include <stdio.h>
 #include "esp_log.h"
@@ -19,7 +18,6 @@ public:
     ~OV2640(){
     };
     esp_err_t init(camera_config_t config);
-    void done(void);
     void run(void);
     size_t getSize(void);
     uint8_t *getfb(void);

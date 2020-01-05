@@ -4,6 +4,8 @@ This is a small library which can be used to serve up RTSP streams from
 resource constrained MCUs.  It lets you trivially make a $10 open source
 RTSP video stream camera.
 
+**fork for arduino hacking**
+
 # Usage
 
 This library works for ESP32/arduino targets but also for most any posixish platform.

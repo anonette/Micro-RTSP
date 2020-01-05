@@ -1,6 +1,5 @@
 #pragma once
 
-#include "LinkedListElement.h"
 #include "CStreamer.h"
 #include "platglue.h"
 
@@ -19,10 +18,10 @@ enum RTSP_CMD_TYPES
 #define RTSP_PARAM_STRING_MAX  200
 #define MAX_HOSTNAME_LEN       256
 
-class CRtspSession : public LinkedListElement
+class CRtspSession
 {
 public:
-    CRtspSession(WiFiClient& aRtspClient, CStreamer * aStreamer);
+    CRtspSession(SOCKET aRtspClient, CStreamer * aStreamer);
     ~CRtspSession();
 
     RTSP_CMD_TYPES Handle_RtspRequest(char const * aRequest, unsigned aRequestSize);
@@ -35,15 +34,14 @@ public:
      */
     bool handleRequests(uint32_t readTimeoutMs);
 
+    /**
+       broadcast a current frame
+     */
+    void broadcastCurrentFrame(uint32_t curMsec);
+
     bool m_streaming;
     bool m_stopped;
 
-    void    InitTransport(u_short aRtpPort, u_short aRtcpPort);
-
-    bool isTcpTransport() { return m_TcpTransport; }
-    SOCKET& getClient() { return m_RtspClient; }
-    
-    uint16_t getRtpClientPort() { return m_RtpClientPort; }
 private:
     void Init();
     bool ParseRtspRequest(char const * aRequest, unsigned aRequestSize);
@@ -57,7 +55,6 @@ private:
 
     // global session state parameters
     int m_RtspSessionID;
-    WiFiClient m_Client;
     SOCKET m_RtspClient;                                      // RTSP socket of that session
     int m_StreamID;                                           // number of simulated stream of that session
     IPPORT m_ClientRTPPort;                                  // client port for UDP based RTP transport
@@ -73,7 +70,4 @@ private:
     char m_CSeq[RTSP_PARAM_STRING_MAX];                       // RTSP command sequence number
     char m_URLHostPort[MAX_HOSTNAME_LEN];                     // host:port part of the URL
     unsigned m_ContentLength;                                 // SDP string size
-
-    uint16_t m_RtpClientPort;      // RTP receiver port on client (in host byte order!)
-    uint16_t m_RtcpClientPort;     // RTCP receiver port on client (in host byte order!)
 };
